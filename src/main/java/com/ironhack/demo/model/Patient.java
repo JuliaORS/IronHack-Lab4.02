@@ -2,6 +2,8 @@ package com.ironhack.demo.model;
 
 import jakarta.persistence.*;
 
+import java.util.Date;
+
 @Entity
 @Table(name = "patient")
 public class Patient {
@@ -13,13 +15,14 @@ public class Patient {
     @Column(name="name")
     private String name;
 
-    private String dateOfBirth;
+    @Temporal(TemporalType.DATE)
+    private Date dateOfBirth;
     @ManyToOne
     @JoinColumn(name = "admitted_by", referencedColumnName = "employee_id")
     private Employee admittedBy;
 
     public Patient(){}
-    public Patient(String name, String dateOfBirth, Employee admittedBy, Integer patientId) {
+    public Patient(String name, Date dateOfBirth, Employee admittedBy, Integer patientId) {
 
         setName(name);
         setDateOfBirth(dateOfBirth);
@@ -38,11 +41,11 @@ public class Patient {
         this.name = name;
     }
 
-    public String getDateOfBirth() {
+    public Date getDateOfBirth() {
         return dateOfBirth;
     }
 
-    public void setDateOfBirth(String dateOfBirth) {
+    public void setDateOfBirth(Date dateOfBirth) {
         this.dateOfBirth = dateOfBirth;
     }
 

@@ -6,11 +6,11 @@ import com.ironhack.demo.repository.EmployeeRepository;
 import com.ironhack.demo.repository.PatientRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.ResponseStatus;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.List;
 
 @RestController
@@ -32,10 +32,13 @@ public class PatientController {
     public Patient getPatientById(@PathVariable(name="id") Integer patientID) {
         return patientRepository.findById(patientID).get();
     }
-    @GetMapping("/patients/date_of_birth/{date_of_birth}")
+    @GetMapping("/patients/date_of_birth_range")
     @ResponseStatus(HttpStatus.OK)
-    public List<Patient> getPatientByDateOfBirth(@PathVariable(name="date_of_birth") String dateOfBirth) {
-        return patientRepository.findByDateOfBirth(dateOfBirth);
+    public List<Patient> getByBirthdateRange(@RequestParam String startDate, @RequestParam String endDate) throws ParseException {
+        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
+        Date parsedStartDate = dateFormat.parse(startDate);
+        Date parsedEndDate = dateFormat.parse(endDate);
+        return patientRepository.findByDateOfBirthBetween(parsedStartDate, parsedEndDate);
     }
 
     @GetMapping("/patients/department/{department}")
